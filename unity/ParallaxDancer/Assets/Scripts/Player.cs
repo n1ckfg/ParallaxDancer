@@ -6,6 +6,7 @@ public class Player : MonoBehaviour {
 
     public Animator animator;
 	public float lerpSpeed = 0.1f;
+    public bool doFlip = true;
 
     [HideInInspector] public Vector2 screenCoords;
     [HideInInspector] public bool isRunning = false;
@@ -17,10 +18,12 @@ public class Player : MonoBehaviour {
 
         transform.position = Vector2.Lerp(transform.position, new Vector2(screenCoords.x, transform.position.y), lerpSpeed);
 
-		if (screenCoords.x < transform.position.x) {
-            transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        } else {
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        if (doFlip) {
+            if (screenCoords.x < transform.position.x) {
+                transform.localScale = new Vector3(-Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            } else {
+                transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            }
         }
 
 		if (screenCoords.x > -screenBounds.x/8f && screenCoords.x < screenBounds.x/8f) {
@@ -29,7 +32,7 @@ public class Player : MonoBehaviour {
             isRunning = true;
         }
 
-        animator.SetBool("Playing", isRunning);
+        if (animator != null) animator.SetBool("Playing", isRunning);
     }
 
 }
